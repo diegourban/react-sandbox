@@ -21,13 +21,64 @@
 	<script src="https://fb.me/react-dom-15.1.0.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
     <script type="text/babel">
-	var HelloWorld = React.createClass({
-		render: function() {
-			return <p>Reactive Hello</p>;
-		}
-	});
+		var ProductCategoryRow = React.createClass({
+			render: function() {
+				return (<tr><th>{this.props.category}</th></tr>);
+			}
+		});
 		
-	ReactDOM.render(<HelloWorld/>,document.getElementById('container'));
+		var ProductRow = React.createClass({
+			render: function() {
+				return (
+					<tr>
+						<td>{this.props.product.name}</td>
+						<td>{this.props.product.price}</td>
+					</tr>
+				);
+			}
+		});
+		
+		var ProductTable = React.createClass({
+			render: function() {
+				var rows = [];
+				this.props.products.forEach(function(product) {
+					rows.push(<ProductRow product={product} key={product.name}/>);
+				});
+				
+				return (
+					<table>
+						<thead>
+							<tr>
+								<td>Name</td>
+								<td>Price</td>
+							</tr>
+						</thead>
+						<tbody>{rows}</tbody>
+					</table>
+				);
+			}
+		});
+		
+		var FilterableProductTable = React.createClass({
+			render: function() {
+				return (
+					<div>
+						<ProductTable products={this.props.products}/>
+					</div>
+				);
+			}
+		});
+		
+		var PRODUCTS = [
+		  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+		  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+		  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+		  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+		  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+		  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+		];
+		
+		ReactDOM.render(<FilterableProductTable products={PRODUCTS}/>, document.getElementById('container'));		
     </script>
   </body>
 </html>
