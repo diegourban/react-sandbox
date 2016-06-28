@@ -78,7 +78,40 @@
 		  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
 		];
 		
-		ReactDOM.render(<FilterableProductTable products={PRODUCTS}/>, document.getElementById('container'));		
+		var MyComponent = React.createClass({
+			render: function() {
+				return (
+					<div>
+						{this.props.name}
+					</div>
+				);
+			}
+		});
+		
+		class MyComponentES6 extends React.Component{
+			render() {
+				var count = React.Children.count(this.props.children);
+				console.log(count);
+				
+				React.Children.map(this.props.children, function(child){
+					console.log(child);
+				});
+				return (
+					<div>
+						{this.props.name}
+					</div>
+				);
+			}
+		};
+		
+		// without JSX
+		//ReactDOM.render(React.createElement(MyComponentES6, {name: "frodo without JSX"}), document.getElementById('container'));
+		
+		// with JSX
+		//ReactDOM.render(<MyComponentES6 name="frodo with JSX"/>, document.getElementById('container'));		
+		
+		// with 1 child
+		ReactDOM.render(<MyComponentES6 name="frodo with JSX"> <p key="firsty">a child</p> </MyComponentES6>, document.getElementById('container'));		
     </script>
   </body>
 </html>
