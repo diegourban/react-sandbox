@@ -87,7 +87,7 @@
 				);
 			}
 		});
-		
+		// ES6
 		class MyComponentES6 extends React.Component{
 			render() {
 				var count = React.Children.count(this.props.children);
@@ -103,6 +103,30 @@
 				);
 			}
 		};
+		
+		var GenericComponent = React.createClass({
+			getInitialState: function() {
+				return {thing: this.props.thingy};
+			},
+			getDefaultProps: function() {
+				return {thingy: "cheese"}
+			},
+			render: function() {
+				return (
+					<div>
+						{this.state.thingy}
+					<div>
+				)
+			}
+		});
+		// ES6
+		class GenericComponentES6 extends React.Component{
+			constructor(props) {
+				super(props);
+				this.state = {thing : props.thingy};
+			}
+		};
+		GenericComponentES6.defaultProps = {thingy : "cheese"};
 		
 		// without JSX
 		//ReactDOM.render(React.createElement(MyComponentES6, {name: "frodo without JSX"}), document.getElementById('container'));
