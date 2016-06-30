@@ -8,14 +8,12 @@
   <body>
     <h1>Basic Example</h1>
     <div id="container">
-      <p>
-        To install React, follow the instructions on
-        <a href="https://github.com/facebook/react/">GitHub</a>.
-      </p>
-      <p>
-        If you can see this, React is <strong>not</strong> working right.
-        If you checked out the source from GitHub make sure to run <code>grunt</code>.
-      </p>
+		<div id="my-component-without-jsx"></div>
+		<div id="my-component"></div>
+		<div id="my-component-es6"></div>
+		<div id="my-component-es6-child"></div>
+		<div id="my-component-es6-default-props"></div>
+		<div id="mixins"></div>
     </div>
     <script src="https://fb.me/react-15.1.0.js"></script>
 	<script src="https://fb.me/react-dom-15.1.0.js"></script>
@@ -100,7 +98,7 @@
 		};
 		
 		// using count and map
-		class MyComponentES6v2 extends React.Component{
+		class MyComponentChild extends React.Component{
 			render() {
 				var count = React.Children.count(this.props.children);
 				console.log(count);
@@ -110,7 +108,7 @@
 				});
 				return (
 					<div>
-						{this.props.name}
+						{this.props.name} Child count: {count}
 					</div>
 				);
 			}
@@ -146,18 +144,57 @@
 				);
 			}
 		};
-		GenericComponentES6.defaultProps = {thingy : "cheese"};
+		GenericComponentES6.defaultProps = {thingy : "GenericComponentES6 with default props"};
+		
+		// mixins
+		var SetIntervalMixin = {
+		  componentWillMount: function() {
+			this.intervals = [];
+		  },
+		  setInterval: function() {
+			this.intervals.push(setInterval.apply(null, arguments));
+		  },
+		  componentWillUnmount: function() {
+			this.intervals.map(clearInterval);
+		  }
+		};
+		
+		var TickTock = React.createClass({
+		  mixins: [SetIntervalMixin], // Use the mixin
+		  getInitialState: function() {
+			return {seconds: 0};
+		  },
+		  componentDidMount: function() {
+			this.setInterval(this.tick, 1000); // Call a method on the mixin
+		  },
+		  tick: function() {
+			this.setState({seconds: this.state.seconds + 1});
+		  },
+		  render: function() {
+			return (
+			  <p>
+				React has been running for {this.state.seconds} seconds.
+			  </p>
+			);
+		  }
+		});
+		
 		
 		// without JSX
-		//ReactDOM.render(React.createElement(MyComponentES6, {name: "frodo without JSX"}), document.getElementById('container'));
+		ReactDOM.render(React.createElement(MyComponent, {name: "MyComponent without JSX"}), document.getElementById('my-component-without-jsx'));
+		
+		// without ES6
+		ReactDOM.render(<MyComponent name="MyComponent"/>, document.getElementById('my-component'));		
 		
 		// with JSX
-		//ReactDOM.render(<MyComponentES6 name="frodo with JSX"/>, document.getElementById('container'));		
+		ReactDOM.render(<MyComponentES6 name="MyComponent with ES6"/>, document.getElementById('my-component-es6'));		
 		
 		// with 1 child
-		//ReactDOM.render(<MyComponentES6 name="frodo with JSX"> <p key="firsty">a child</p> </MyComponentES6>, document.getElementById('container'));		
+		ReactDOM.render(<MyComponentChild name="MyComponentES6 with child"> <p key="firsty">a child</p> </MyComponentChild>, document.getElementById('my-component-es6-child'));		
 		
-		ReactDOM.render(<GenericComponentES6 />, document.getElementById('container'));		
+		ReactDOM.render(<GenericComponentES6 />, document.getElementById('my-component-es6-default-props'));
+		
+		ReactDOM.render(<TickTock />, document.getElementById('mixins'));
     </script>
   </body>
 </html>
