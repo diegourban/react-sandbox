@@ -14,6 +14,10 @@
 		<div id="my-component-es6-child"></div>
 		<div id="my-component-es6-default-props"></div>
 		<div id="mixins"></div>
+		<div id="proptypes"></div>
+		<div id="initial-state-lifecycle"></div>
+		<div id="state-change-lifecycle"></div>
+		<div id="props-change-lifecycle"></div>
     </div>
     <script src="https://fb.me/react-15.1.0.js"></script>
 	<script src="https://fb.me/react-dom-15.1.0.js"></script>
@@ -179,6 +183,104 @@
 		  }
 		});
 		
+		//proptypes
+		class MyComponentPropTypes extends React.Component {
+			propTypes: {
+				requiredName: React.PropTypes.string.isRequired,
+				optionalBoolean: React.PropTypes.bool
+			}
+			constructor(props) {
+				super(props);
+				this.state = {thing : props.optionalBoolean};
+			}
+			render() {
+				return (
+					<div>
+						{this.state.thing}
+					</div>
+				);
+			}
+		}
+		
+		// lifecycles
+		
+		var GenericComponentInitialRenderLifecycle = React.createClass({
+			// Lifecycle during initial render: getInitialProps > getInitialState > componentWillMount > render > componentDidMount
+			// first
+			getInitialProps: function() {
+				return {};
+			},
+			
+			// second
+			getInitialState: function() {
+				return {};
+			},
+			
+			// third
+			componentWillMount: function() {
+			
+			},
+			
+			// render
+			render: function() {
+				return (<h1>Hello Initial State</h1>);
+			},
+			
+			// finally
+			componentDidMount: function() {
+			
+			}
+		});
+		
+		var GenericComponentStateChangeLifecycle = React.createClass({
+			// Lifecycle during state change: shouldComponentUpdate > componentWillUpdate > render > componentDidUpdate
+			// first
+			shouldComponentUpdate: function() {
+			},
+			
+			// second
+			componentWillUpdate: function() {
+			},
+			
+			// render
+			render: function() {
+				return (<h1>Hello State Change</h1>);
+			},
+			
+			// finally
+			componentDidUpdate: function() {
+			
+			}
+		});
+		
+		var GenericComponentPropsChangeLifecycle = React.createClass({
+			// Lifecycle during state change: componentWillReceiveProps > shouldComponentUpdate > componentWillUpdate > render > componentDidUpdate
+			// first
+			componentWillReceiveProps: function(nextProps) {
+			},
+			
+			// second
+			shouldComponentUpdate: function(nextProps, nextState) {
+				// if you want to prevent the component updating
+				// return false;
+				return true;
+			},
+			
+			// third
+			componentWillUpdate: function(nextProps, nextState) {
+			},
+			
+			// render
+			render: function() {
+				return (<h1>Hello Props Change</h1>);
+			},
+			
+			// finally
+			componentDidUpdate: function() {
+			
+			}
+		});
+		
 		
 		// without JSX
 		ReactDOM.render(React.createElement(MyComponent, {name: "MyComponent without JSX"}), document.getElementById('my-component-without-jsx'));
@@ -195,6 +297,13 @@
 		ReactDOM.render(<GenericComponentES6 />, document.getElementById('my-component-es6-default-props'));
 		
 		ReactDOM.render(<TickTock />, document.getElementById('mixins'));
+		
+		ReactDOM.render(<MyComponentPropTypes optionalBoolean="21"/>, document.getElementById('proptypes'));
+		
+		// lifecycles teste
+		ReactDOM.render(<GenericComponentInitialRenderLifecycle />, document.getElementById('initial-state-lifecycle'));
+		ReactDOM.render(<GenericComponentStateChangeLifecycle />, document.getElementById('state-change-lifecycle'));	
+		ReactDOM.render(<GenericComponentPropsChangeLifecycle />, document.getElementById('props-change-lifecycle'));
     </script>
   </body>
 </html>
