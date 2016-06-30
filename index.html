@@ -78,6 +78,7 @@
 		  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
 		];
 		
+		// render
 		var MyComponent = React.createClass({
 			render: function() {
 				return (
@@ -87,8 +88,19 @@
 				);
 			}
 		});
-		// ES6
+		// render using ES6
 		class MyComponentES6 extends React.Component{
+			render() {
+				return (
+					<div>
+						{this.props.name}
+					</div>
+				);
+			}
+		};
+		
+		// using count and map
+		class MyComponentES6v2 extends React.Component{
 			render() {
 				var count = React.Children.count(this.props.children);
 				console.log(count);
@@ -104,26 +116,34 @@
 			}
 		};
 		
+		// state and default props
 		var GenericComponent = React.createClass({
 			getInitialState: function() {
 				return {thing: this.props.thingy};
 			},
 			getDefaultProps: function() {
-				return {thingy: "cheese"}
+				return {thingy: 'cheese'};
 			},
 			render: function() {
 				return (
 					<div>
-						{this.state.thingy}
-					<div>
-				)
+						{this.state.thing}
+					</div>
+				);
 			}
 		});
-		// ES6
+		// state and default props using ES6
 		class GenericComponentES6 extends React.Component{
 			constructor(props) {
 				super(props);
 				this.state = {thing : props.thingy};
+			}
+			render() {
+				return (
+					<div>
+						{this.state.thing}
+					</div>
+				);
 			}
 		};
 		GenericComponentES6.defaultProps = {thingy : "cheese"};
@@ -135,7 +155,9 @@
 		//ReactDOM.render(<MyComponentES6 name="frodo with JSX"/>, document.getElementById('container'));		
 		
 		// with 1 child
-		ReactDOM.render(<MyComponentES6 name="frodo with JSX"> <p key="firsty">a child</p> </MyComponentES6>, document.getElementById('container'));		
+		//ReactDOM.render(<MyComponentES6 name="frodo with JSX"> <p key="firsty">a child</p> </MyComponentES6>, document.getElementById('container'));		
+		
+		ReactDOM.render(<GenericComponentES6 />, document.getElementById('container'));		
     </script>
   </body>
 </html>
