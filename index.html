@@ -20,13 +20,13 @@
 		<div id="props-change-lifecycle"></div>
 		<div id="spreading-attributes"></div>
 		<div id="looping"></div>
+		<div id="conditions"></div>
     </div>
     <script src="https://fb.me/react-15.1.0.js"></script>
 	<script src="https://fb.me/react-dom-15.1.0.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
     <script type="text/babel">		
-		// ------------------------------
-		// render
+		// ------------------------------ render
 		var MyComponent = React.createClass({
 			render: function() {
 				return (
@@ -37,8 +37,7 @@
 			}
 		});
 		
-		// ------------------------------
-		// render using ES6
+		// ------------------------------ render using ES6
 		class MyComponentES6 extends React.Component{
 			render() {
 				return (
@@ -49,8 +48,7 @@
 			}
 		};
 		
-		// ------------------------------
-		// using count and map
+		// ------------------------------ using count and map
 		class MyComponentChild extends React.Component{
 			render() {
 				var count = React.Children.count(this.props.children);
@@ -67,8 +65,7 @@
 			}
 		};
 		
-		// ------------------------------
-		// state and default props
+		// ------------------------------ state and default props
 		var GenericComponent = React.createClass({
 			getInitialState: function() {
 				return {thing: this.props.thingy};
@@ -85,8 +82,7 @@
 			}
 		});
 		
-		// ------------------------------
-		// state and default props using ES6
+		// ------------------------------ state and default props using ES6
 		class GenericComponentES6 extends React.Component{
 			constructor(props) {
 				super(props);
@@ -102,8 +98,7 @@
 		};
 		GenericComponentES6.defaultProps = {thingy : "GenericComponentES6 with default props"};
 		
-		// ------------------------------
-		// mixins
+		// ------------------------------ mixins
 		
 		var SetIntervalMixin = {
 		  componentWillMount: function() {
@@ -137,9 +132,7 @@
 		  }
 		});
 		
-		// ------------------------------
-		// proptypes
-		
+		// ------------------------------ proptypes		
 		class MyComponentPropTypes extends React.Component {
 			propTypes: {
 				requiredName: React.PropTypes.string.isRequired,
@@ -158,9 +151,7 @@
 			}
 		}
 		
-		// ------------------------------
-		// lifecycles
-		
+		// ------------------------------ lifecycles		
 		var GenericComponentInitialRenderLifecycle = React.createClass({
 			// Lifecycle during initial render: getInitialProps > getInitialState > componentWillMount > render > componentDidMount
 			// first
@@ -238,8 +229,7 @@
 			}
 		});
 		
-		// ------------------------------
-		// spreading properties
+		// ------------------------------ spreading properties
 		var greeting = {};
 		greeting.name = "World";
 		greeting.message = "All your base belong to us.";
@@ -252,8 +242,7 @@
 			}
 		}
 		
-		// ------------------------------
-		// looping
+		// ------------------------------ looping
 		class ListItem extends React.Component {
 			render() {
 				return <li>{this.props.text}</li>;
@@ -272,7 +261,35 @@
 			}
 		}
 		
-		// ---------- rendering ----------
+		// ------------------------------ conditionals
+		var SignIn = React.createClass({
+			render: function() {
+				return <a href="/signin">Sign In</a>;
+			}
+		});
+		
+		var UserMenu = React.createClass({
+			render: function() {
+				return <ul className="usermenu"><li>Item</li><li>Another</li></ul>;
+			}
+		});
+		
+		var userSignedIn = false;
+		var MainApp = React.createClass({
+			render: function() {
+				var navElement;
+				if(userSignedIn) {
+					navElement = <UserMenu/>
+				} else {
+					navElement = <SignIn />
+				}
+				return <div>{navElement}</div>;
+				// using ternary operators
+				// return  <div>{userSignedIn ? <UserMenu/> : <SignIn />}</div>;
+			}
+		});
+		
+		// ------------------------------ rendering 
 		// without JSX
 		ReactDOM.render(React.createElement(MyComponent, {name: "MyComponent without JSX"}), document.getElementById('my-component-without-jsx'));
 		
@@ -301,6 +318,9 @@
 		
 		// looping
 		ReactDOM.render(<BigList />, document.getElementById("looping"));
+		
+		// conditions
+		ReactDOM.render(<MainApp />, document.getElementById("conditions"));
     </script>
   </body>
 </html>
