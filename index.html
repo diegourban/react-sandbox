@@ -293,11 +293,11 @@
 		// without JSX
 		ReactDOM.render(React.createElement(MyComponent, {name: "MyComponent without JSX"}), document.getElementById('my-component-without-jsx'));
 		
-		// without ES6
-		ReactDOM.render(<MyComponent name="MyComponent"/>, document.getElementById('my-component'));		
+		// with JSX without ES6
+		ReactDOM.render(<MyComponent name="MyComponent with JSX and without ES6"/>, document.getElementById('my-component'));		
 		
-		// with JSX
-		ReactDOM.render(<MyComponentES6 name="MyComponent with ES6"/>, document.getElementById('my-component-es6'));		
+		// with JSX with ES6
+		ReactDOM.render(<MyComponentES6 name="MyComponentES6 with JSX and with ES6"/>, document.getElementById('my-component-es6'));		
 		
 		// with 1 child
 		ReactDOM.render(<MyComponentChild name="MyComponentES6 with child"> <p key="firsty">a child</p> </MyComponentChild>, document.getElementById('my-component-es6-child'));		
