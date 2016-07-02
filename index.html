@@ -18,68 +18,14 @@
 		<div id="initial-state-lifecycle"></div>
 		<div id="state-change-lifecycle"></div>
 		<div id="props-change-lifecycle"></div>
+		<div id="spreading-attributes"></div>
+		<div id="looping"></div>
     </div>
     <script src="https://fb.me/react-15.1.0.js"></script>
 	<script src="https://fb.me/react-dom-15.1.0.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
-    <script type="text/babel">
-		var ProductCategoryRow = React.createClass({
-			render: function() {
-				return (<tr><th>{this.props.category}</th></tr>);
-			}
-		});
-		
-		var ProductRow = React.createClass({
-			render: function() {
-				return (
-					<tr>
-						<td>{this.props.product.name}</td>
-						<td>{this.props.product.price}</td>
-					</tr>
-				);
-			}
-		});
-		
-		var ProductTable = React.createClass({
-			render: function() {
-				var rows = [];
-				this.props.products.forEach(function(product) {
-					rows.push(<ProductRow product={product} key={product.name}/>);
-				});
-				
-				return (
-					<table>
-						<thead>
-							<tr>
-								<td>Name</td>
-								<td>Price</td>
-							</tr>
-						</thead>
-						<tbody>{rows}</tbody>
-					</table>
-				);
-			}
-		});
-		
-		var FilterableProductTable = React.createClass({
-			render: function() {
-				return (
-					<div>
-						<ProductTable products={this.props.products}/>
-					</div>
-				);
-			}
-		});
-		
-		var PRODUCTS = [
-		  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
-		  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
-		  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
-		  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
-		  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
-		  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
-		];
-		
+    <script type="text/babel">		
+		// ------------------------------
 		// render
 		var MyComponent = React.createClass({
 			render: function() {
@@ -90,6 +36,8 @@
 				);
 			}
 		});
+		
+		// ------------------------------
 		// render using ES6
 		class MyComponentES6 extends React.Component{
 			render() {
@@ -101,6 +49,7 @@
 			}
 		};
 		
+		// ------------------------------
 		// using count and map
 		class MyComponentChild extends React.Component{
 			render() {
@@ -118,6 +67,7 @@
 			}
 		};
 		
+		// ------------------------------
 		// state and default props
 		var GenericComponent = React.createClass({
 			getInitialState: function() {
@@ -134,6 +84,8 @@
 				);
 			}
 		});
+		
+		// ------------------------------
 		// state and default props using ES6
 		class GenericComponentES6 extends React.Component{
 			constructor(props) {
@@ -150,7 +102,9 @@
 		};
 		GenericComponentES6.defaultProps = {thingy : "GenericComponentES6 with default props"};
 		
+		// ------------------------------
 		// mixins
+		
 		var SetIntervalMixin = {
 		  componentWillMount: function() {
 			this.intervals = [];
@@ -183,7 +137,9 @@
 		  }
 		});
 		
-		//proptypes
+		// ------------------------------
+		// proptypes
+		
 		class MyComponentPropTypes extends React.Component {
 			propTypes: {
 				requiredName: React.PropTypes.string.isRequired,
@@ -202,6 +158,7 @@
 			}
 		}
 		
+		// ------------------------------
 		// lifecycles
 		
 		var GenericComponentInitialRenderLifecycle = React.createClass({
@@ -281,7 +238,41 @@
 			}
 		});
 		
+		// ------------------------------
+		// spreading properties
+		var greeting = {};
+		greeting.name = "World";
+		greeting.message = "All your base belong to us.";
 		
+		class SpreadAttributes extends React.Component {
+			render() {
+				return (
+					<div>Hello {this.props.name}, {this.props.message}</div>
+				);
+			}
+		}
+		
+		// ------------------------------
+		// looping
+		class ListItem extends React.Component {
+			render() {
+				return <li>{this.props.text}</li>;
+			}
+		}
+		
+		class BigList extends React.Component {
+			render() {
+				var items = ["item1", "item2", "item3", "item4"];
+				var formattedItems = [];
+				for(var i = 0, ii = items.length; i < ii; i++) {
+					var textObj = {text: items[i]};
+					formattedItems.push(<ListItem {...textObj} />);
+				}
+				return <ul>{formattedItems}</ul>;	
+			}
+		}
+		
+		// ---------- rendering ----------
 		// without JSX
 		ReactDOM.render(React.createElement(MyComponent, {name: "MyComponent without JSX"}), document.getElementById('my-component-without-jsx'));
 		
@@ -304,6 +295,12 @@
 		ReactDOM.render(<GenericComponentInitialRenderLifecycle />, document.getElementById('initial-state-lifecycle'));
 		ReactDOM.render(<GenericComponentStateChangeLifecycle />, document.getElementById('state-change-lifecycle'));	
 		ReactDOM.render(<GenericComponentPropsChangeLifecycle />, document.getElementById('props-change-lifecycle'));
+		
+		// spreading attributes
+		ReactDOM.render(<SpreadAttributes {...greeting}/>, document.getElementById('spreading-attributes'));
+		
+		// looping
+		ReactDOM.render(<BigList />, document.getElementById("looping"));
     </script>
   </body>
 </html>
