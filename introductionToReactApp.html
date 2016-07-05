@@ -66,7 +66,7 @@
 				return (
 					<ul>
 						<li><a href="#" onClick={this.props.onNav.bind(null, this._nav("define"))}>Define a Workout</a></li>
-						<li><a href="#" onClick={this.props.onNav.bind(null, this._nav("store"))}>Reacord a Workout</a></li>
+						<li><a href="#" onClick={this.props.onNav.bind(null, this._nav("store"))}>Record a Workout</a></li>
 						<li><a href="#" onClick={this.props.onNav.bind(null, this._nav("history"))}>View History</a></li>
 						<li><a href="#" onClick={this.props.onLogout}>Logout</a></li>
 					</ul>
@@ -115,7 +115,7 @@
 			render: function() {
 				var opts = [];
 				for(var i = 0; i < this._mockWorkouts.length; i++) {
-					opts.push(<Option value={this._mockWorkouts[i].name}/>);
+					opts.push(<Option key={i} value={this._mockWorkouts[i].name}/>);
 				}
 				return (
 					<div id="logWorkout" className="tabview">
@@ -128,7 +128,7 @@
 						<input id="workoutResult" type="text"/>
 						<input id="workoutDate" type="date"/>
 						<label htmlFor="notes">Notes:</label>
-						<textarea id="notes">Notes:</textarea>
+						<textarea id="notes" defaultValue="Notes:"></textarea>
 						<button>Store</button>
 					</div>
 				);
@@ -154,7 +154,7 @@
 				var formattedLi = [];
 				for(var i = 0; i < hist.length; i++) {
 					var histObj = {name: hist[i].name, result: hist[i].result};
-					formattedLi.push(<ListItem {...histObj} />);
+					formattedLi.push(<ListItem {...histObj} key={i}/>);
 				}
 				
 				return (
@@ -168,7 +168,50 @@
 			}
 		});
 		
-		ReactDOM.render(<SignIn />, document.getElementById("container"));
+		var WorkoutLog = React.createClass({
+			getInitialState: function() {
+				return {view: "define"}
+			},
+			render: function() {
+				return(
+					<div>
+						<h1>Workout Log</h1>
+						<Navigation onLogout={this.props.onLogout} onNav={this._onNav} />
+						{this.state.view === "define" ? <DefineWorkout /> : ""}
+						{this.state.view === "store" ? <StoreWorkout /> : ""}
+						{this.state.view === "history" ? <History /> : ""}
+					</div>
+				);
+			},
+			_onNav: function(theView) {
+				this.setState({view: theView});
+			}
+		});
+		
+		var App = React.createClass({
+			getInitialState: function() {
+				return {signedIn: false}
+			},
+			render: function() {
+				return(
+					<div>
+						{this.state.signedIn ? <WorkoutLog onLogout={this._onLogout} /> : <Authentication onAuthComplete={this._onAuthComplete}/>}
+					</div>
+				);
+			},
+			_onAuthComplete: function(result) {
+				// let the child auth components control behavior here
+				if(result()) {
+					this.setState({signedIn: true});
+				}
+			},
+			_onLogout: function() {
+				this.setState({signedIn: false});
+			}
+		});
+		
+		ReactDOM.render(<App />, document.getElementById("container"));
     </script>
   </body>
 </html>
+
