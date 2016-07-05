@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Example</title>
+    <link rel="stylesheet" href="resources/css/base.css" />
+  </head>
+  <body>
+    <h1>Basic Example</h1>
+    <div id="container">
+    </div>
+	<script src="vendors/react/react.js"></script>
+	<script src="vendors/react/react-dom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+    <script type="text/babel">		
+		var SignIn = React.createClass({
+			render: function() {
+				return (
+					<div>
+						<label htmlFor="username">Username</label>					
+						<input type="text" id="username"/>
+						<label htmlFor="password">Password</label>
+						<input type="text" id="password"/>
+						<button id="signIn" onClick={this.props.onAuthComplete.bind(null, this._doAuth)}>Sign In</button>
+					</div>
+				);
+			},
+			_doAuth: function() {
+				return true;
+			}
+		});
+		
+		var CreateAccount = React.createClass({
+			render: function() {
+				return(
+					<div>
+						<label htmlFor="username">Username:</label>					
+						<input type="text" id="username"/>
+						<label htmlFor="password">Password:</label>
+						<input type="text" id="password"/>
+						<label htmlFor="confirmPassword">Confirm Password:</label>
+						<input type="text" id="confirmPassword"/>
+						<button id="signIn" onClick={this.props.onAuthComplete.bind(null, this._createAccount)}>Create Cccount</button>
+					</div>
+				);
+			},
+			_createAccount: function() {
+				// do create login here
+				return true;
+			}
+		});
+		
+		var Authentication = React.createClass({
+			render: function() {
+				return (
+					<div>
+						<SignIn onAuthComplete={this.props.onAuthComplete} />
+						<CreateAccount onAuthComplete={this.props.onAuthComplete} />
+					</div>
+				);
+			}
+		});
+		
+		var Navigation = React.createClass({
+			render: function() {
+				return (
+					<ul>
+						<li><a href="#" onClick={this.props.onNav.bind(null, this._nav("define"))}>Define a Workout</a></li>
+						<li><a href="#" onClick={this.props.onNav.bind(null, this._nav("store"))}>Reacord a Workout</a></li>
+						<li><a href="#" onClick={this.props.onNav.bind(null, this._nav("history"))}>View History</a></li>
+						<li><a href="#" onClick={this.props.onLogout}>Logout</a></li>
+					</ul>
+				);
+			},
+			_nav: function(view) {
+				return view;
+			}
+		});
+		
+		var DefineWorkout = React.createClass({
+			render: function() {
+				return (
+					<div id="defineWorkouts">
+						<h2>Define Workout</h2>
+						<label htmlFor="defineName">Define Name</label>					
+						<input type="text" id="defineName"/>
+						
+						<label htmlFor="defineType">Define Type</label>					
+						<input type="text" id="defineType"/>
+						
+						<label htmlFor="defineDesc">Description</label>					
+						<textarea id="defineDesc"/>
+						
+						<button id="saveDefinition">Save Definition</button>
+					</div>
+				);
+			}
+		});
+		
+		var Option = React.createClass({
+			render: function() {
+				return <option>{this.props.value}</option>;
+			}
+		});
+		
+		var StoreWorkout = React.createClass({
+			_mockWorkouts: [
+				{
+					"name": "Murph",
+					"type": "fortime",
+					"description": "Run 1 mile \n 100 pull-ups \n 200 push-ups \n 300 squats \n Run 1 mile"
+				}
+			],
+			
+			render: function() {
+				var opts = [];
+				for(var i = 0; i < this._mockWorkouts.length; i++) {
+					opts.push(<Option value={this._mockWorkouts[i].name}/>);
+				}
+				return (
+					<div id="logWorkout" className="tabview">
+						<h2>Record Workout</h2>
+						<label htmlFor="chooseWorkout">Workout:</label>
+						<select name="" id="chooseWorkout">
+							{opts}
+						</select>
+						<label htmlFor="workoutResult">Result:</label>
+						<input id="workoutResult" type="text"/>
+						<input id="workoutDate" type="date"/>
+						<label htmlFor="notes">Notes:</label>
+						<textarea id="notes">Notes:</textarea>
+						<button>Store</button>
+					</div>
+				);
+			}
+		});
+		
+		var ListItem = React.createClass({
+			render: function() {
+				return <li>{this.props.name} - {this.props.result}</li>;
+			}
+		});
+		
+		var History = React.createClass({
+			_mockHistory: [
+				{
+					"name": "Murph",
+					"result": "32:18",
+					"notes": "painful, but fun"
+				}
+			],
+			render: function() {
+				var hist = this._mockHistory;
+				var formattedLi = [];
+				for(var i = 0; i < hist.length; i++) {
+					var histObj = {name: hist[i].name, result: hist[i].result};
+					formattedLi.push(<ListItem {...histObj} />);
+				}
+				
+				return (
+					<div>
+						<h2>History</h2>
+						<ul>
+							{formattedLi}
+						</ul>
+					</div>
+				);
+			}
+		});
+		
+		ReactDOM.render(<SignIn />, document.getElementById("container"));
+    </script>
+  </body>
+</html>
