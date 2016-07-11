@@ -22,8 +22,8 @@
 		<div id="looping"></div>
 		<div id="conditions"></div>
     </div>
-    <script src="https://fb.me/react-15.1.0.js"></script>
-	<script src="https://fb.me/react-dom-15.1.0.js"></script>
+    <script src="vendors/react/react.js"></script>
+	<script src="vendors/react/react-dom.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
     <script type="text/babel">		
 		// ------------------------------ render
@@ -130,6 +130,19 @@
 			  </p>
 			);
 		  }
+		});
+		
+		var TickTockList = React.createClass({
+			render: function() {
+				var tickTocks = [];
+				for(var i = 0; i < 1000; i++) {
+					tickTocks.push(<TickTock />);
+				}
+				
+				return (
+					<div>{tickTocks}</div>
+				);
+			}
 		});
 		
 		// ------------------------------ proptypes		
@@ -289,38 +302,103 @@
 			}
 		});
 		
+		var Cell = React.createClass({
+			render: function() {
+				return (
+					<div>{this.props.x} - {this.props.y}</div>
+				);
+			}
+		});
+		
+		var Teste = React.createClass({
+			mixins: [SetIntervalMixin], // Use the mixin
+			getInitialProps: function() {
+				console.log("getInitialProps");
+				return {default: 0};
+			},
+			
+			getInitialState: function() {
+				console.log("getInitialState");
+				return {someNumber: this.props.default};
+			},
+			
+			componentWillMount: function() {
+				console.log("componentWillMount");
+			},
+			
+			shouldComponentUpdate: function(nextProps, nextState) {
+				console.log("shouldComponentUpdate");
+				return true;
+			},
+			
+			componentWillUpdate: function() {
+				console.log("componentWillUpdate");
+			},
+			
+			componentWillReceiveProps: function(nextProps) {
+				console.log("componentWillReceiveProps");
+			},
+					
+			componentWillUpdate: function(nextProps, nextState) {
+				console.log("componentWillUpdate");
+			},
+			
+			render: function() {
+				console.log("render");
+				
+				return(
+					<div>{this.state.someNumber}</div>
+				);
+			},
+			
+			componentDidUpdate: function() {
+				console.log("componentDidUpdate");
+			},
+			
+			componentDidMount: function() {
+				console.log("componentDidMount");
+				this.setInterval(this.tick, 1000); // Call a method on the mixin
+			},
+			tick: function() {
+				var randomNumber = Math.random() * 100;
+				this.setState({someNumber: randomNumber});
+			},
+		});
+		
 		// ------------------------------ rendering 
 		// without JSX
-		ReactDOM.render(React.createElement(MyComponent, {name: "MyComponent without JSX"}), document.getElementById('my-component-without-jsx'));
+		//ReactDOM.render(React.createElement(MyComponent, {name: "MyComponent without JSX"}), document.getElementById('my-component-without-jsx'));
 		
 		// with JSX without ES6
-		ReactDOM.render(<MyComponent name="MyComponent with JSX and without ES6"/>, document.getElementById('my-component'));		
+		//ReactDOM.render(<MyComponent name="MyComponent with JSX and without ES6"/>, document.getElementById('my-component'));		
 		
 		// with JSX with ES6
-		ReactDOM.render(<MyComponentES6 name="MyComponentES6 with JSX and with ES6"/>, document.getElementById('my-component-es6'));		
+		//ReactDOM.render(<MyComponentES6 name="MyComponentES6 with JSX and with ES6"/>, document.getElementById('my-component-es6'));		
 		
 		// with 1 child
-		ReactDOM.render(<MyComponentChild name="MyComponentES6 with child"> <p key="firsty">a child</p> </MyComponentChild>, document.getElementById('my-component-es6-child'));		
+		//ReactDOM.render(<MyComponentChild name="MyComponentES6 with child"> <p key="firsty">a child</p> </MyComponentChild>, //document.getElementById('my-component-es6-child'));		
 		
-		ReactDOM.render(<GenericComponentES6 />, document.getElementById('my-component-es6-default-props'));
+		//ReactDOM.render(<GenericComponentES6 />, document.getElementById('my-component-es6-default-props'));
 		
-		ReactDOM.render(<TickTock />, document.getElementById('mixins'));
+		//ReactDOM.render(<TickTockList />, document.getElementById('mixins'));
 		
-		ReactDOM.render(<MyComponentPropTypes optionalBoolean="21"/>, document.getElementById('proptypes'));
+		//ReactDOM.render(<MyComponentPropTypes optionalBoolean="21"/>, document.getElementById('proptypes'));
 		
 		// lifecycles teste
-		ReactDOM.render(<GenericComponentInitialRenderLifecycle />, document.getElementById('initial-state-lifecycle'));
-		ReactDOM.render(<GenericComponentStateChangeLifecycle />, document.getElementById('state-change-lifecycle'));	
-		ReactDOM.render(<GenericComponentPropsChangeLifecycle />, document.getElementById('props-change-lifecycle'));
+		//ReactDOM.render(<GenericComponentInitialRenderLifecycle />, document.getElementById('initial-state-lifecycle'));
+		//ReactDOM.render(<GenericComponentStateChangeLifecycle />, document.getElementById('state-change-lifecycle'));	
+		//ReactDOM.render(<GenericComponentPropsChangeLifecycle />, document.getElementById('props-change-lifecycle'));
 		
 		// spreading attributes
-		ReactDOM.render(<SpreadAttributes {...greeting}/>, document.getElementById('spreading-attributes'));
+		//ReactDOM.render(<SpreadAttributes {...greeting}/>, document.getElementById('spreading-attributes'));
 		
 		// looping
-		ReactDOM.render(<BigList />, document.getElementById("looping"));
+		//ReactDOM.render(<BigList />, document.getElementById("looping"));
 		
 		// conditions
-		ReactDOM.render(<MainApp />, document.getElementById("conditions"));
+		//ReactDOM.render(<MainApp />, document.getElementById("conditions"));
+		
+		ReactDOM.render(<Teste />, document.getElementById("conditions"));
     </script>
   </body>
 </html>
