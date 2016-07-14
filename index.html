@@ -310,6 +310,100 @@
 			}
 		});
 		
+		var Cell = React.createClass({
+			getInitialState: function() {
+				console.log("getInitialState");
+				return {
+					someNumber: this.props.default,
+					invalido: false
+				};
+			},
+			
+			getInitialProps: function() {
+				console.log("getInitialProps");
+				return {default: 0};
+			},
+			
+			componentWillReceiveProps: function(nextProps) {
+				console.log("componentWillReceiveProps");
+				if(nextProps.someNumber < this.state.someNumber) {
+					this.setState({
+						invalido: true
+					});
+				} else {
+					this.setState({
+						someNumber: nextProps.someNumber,
+						invalido: false
+					});
+				}
+			},
+			
+			render: function() {
+				console.log("render");
+				
+				return(
+					<div>
+						{this.state.invalido ? 'invalido' : this.state.someNumber}
+					</div>
+				);
+			},
+		});
+		
+		var TesteCell = React.createClass({
+			mixins: [SetIntervalMixin], // Use the mixin
+			getInitialState: function() {
+				console.log("getInitialState");
+				return {
+					size: 10,
+					numbers: []
+				};
+			},
+			
+			componentWillMount: function() {
+				console.log("componentWillMount");
+				var numbers = [];
+				for(var i = 0; i < this.state.size; i++) {
+					var randomNumber = Math.random() * 100;
+					numbers.push(randomNumber);
+				}
+				this.setState({
+					numbers: numbers
+				});
+			},
+			
+			render: function() {
+				var cells = [];
+				for(var i = 0; i < this.state.numbers.length; i++) {
+					cells.push(<Cell someNumber={this.state.numbers[i]} />);
+				}
+				return(
+					<div>
+						{cells}
+					</div>
+				);
+			},
+			
+			componentDidMount: function() {
+				console.log("componentDidMount");
+				this.setInterval(this.tick, 1000); // Call a method on the mixin
+			},
+			
+			tick: function() {
+				var numbers = this.generateNewNumbers();				
+				
+				this.setState({numbers: numbers});
+			},
+			
+			generateNewNumbers: function() {
+				var numbers = [];
+				for(var i = 0; i < this.state.size; i++) {
+					var randomNumber = Math.random() * 100;
+					numbers.push(randomNumber);
+				}
+				return numbers;
+			}
+		});
+		
 		var Teste = React.createClass({
 			mixins: [SetIntervalMixin], // Use the mixin
 			getInitialProps: function() {
@@ -319,7 +413,8 @@
 			
 			getInitialState: function() {
 				console.log("getInitialState");
-				return {someNumber: this.props.default};
+				return {someNumber: this.props.default,
+					alive: false};
 			},
 			
 			componentWillMount: function() {
@@ -337,6 +432,16 @@
 			
 			componentWillReceiveProps: function(nextProps) {
 				console.log("componentWillReceiveProps");
+				if(nextProps.status === 'DIE') {
+					this.setState({
+						alive: false
+					});
+				}
+				if(nextProps.status === 'LIVE') {
+					this.setState({
+						alive: true
+					});
+				}
 			},
 					
 			componentWillUpdate: function(nextProps, nextState) {
@@ -398,7 +503,7 @@
 		// conditions
 		//ReactDOM.render(<MainApp />, document.getElementById("conditions"));
 		
-		ReactDOM.render(<Teste />, document.getElementById("conditions"));
+		ReactDOM.render(<TesteCell />, document.getElementById("conditions"));
     </script>
   </body>
 </html>
