@@ -1,4 +1,4 @@
-# Sample Project
+# Book Store
 
 ## Requirements
 * NodeJS
